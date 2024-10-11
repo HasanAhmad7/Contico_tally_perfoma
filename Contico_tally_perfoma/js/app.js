@@ -1,10 +1,17 @@
 document.getElementById('generatePreview').addEventListener('click', function() {
-    // Get the values from the form
+    const selectedCompany = document.getElementById('companySelect').value;
+
+    const companies = {
+        companyA: { name: "Company A", address: "123 Street, City A", logo: "logoA.png" },
+        companyB: { name: "Company B", address: "456 Avenue, City B", logo: "logoB.png" },
+        companyC: { name: "Company C", address: "789 Road, City C", logo: "logoC.png" }
+    };
+
     const clientName = document.getElementById('clientName').value;
     const clientAddress = document.getElementById('clientAddress').value;
+    const clientGSTIN = document.getElementById('clientGSTIN').value;
     const invoiceDate = document.getElementById('invoiceDate').value;
-    
-    // Get the items
+
     let items = [];
     document.querySelectorAll('#items .item').forEach(item => {
         const description = item.querySelector('input[name="itemDesc"]').value;
@@ -13,18 +20,20 @@ document.getElementById('generatePreview').addEventListener('click', function() 
         items.push({ description, quantity, unitPrice });
     });
 
-    // Calculate total price
     let total = 0;
-    items.forEach(item => {
-        total += item.quantity * item.unitPrice;
-    });
+    items.forEach(item => total += item.quantity * item.unitPrice);
 
-    // Inject the values into the preview section
-    const preview = document.getElementById('invoicePreview');
-    preview.innerHTML = `
-        <h3>Invoice Preview</h3>
+    // Create A4 preview content
+    const previewContent = `
+        <div class="invoice-header text-center">
+            <img src="${companies[selectedCompany].logo}" alt="${companies[selectedCompany].name} Logo" style="max-width: 100px;">
+            <h3>${companies[selectedCompany].name}</h3>
+            <p>${companies[selectedCompany].address}</p>
+        </div>
+        <hr>
         <p><strong>Client Name:</strong> ${clientName}</p>
         <p><strong>Client Address:</strong> ${clientAddress}</p>
+        <p><strong>Client GSTIN/UIN:</strong> ${clientGSTIN}</p>
         <p><strong>Invoice Date:</strong> ${invoiceDate}</p>
         <h4>Items</h4>
         <table class="table table-bordered">
@@ -53,22 +62,27 @@ document.getElementById('generatePreview').addEventListener('click', function() 
         </table>
     `;
 
-    // Show the preview section and enable the download button
-    preview.style.display = 'block';
-    document.getElementById('downloadPdf').style.display = 'inline-block';
+    // Insert the content into the A4 preview div
+    document.getElementById('a4-preview').innerHTML = previewContent;
+
+    // Show the modal
+    $('#pdfPreviewModal').modal('show');
 });
 
 document.getElementById('downloadPdf').addEventListener('click', function() {
-    const doc = new jsPDF();
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF('p', 'mm', 'a4');
 
-    // Capture the content of the preview section
-    const content = document.getElementById('invoicePreview').innerHTML;
+    // Get the content from the A4 preview div
+    const content = document.getElementById('a4-preview').innerHTML;
 
-    // Convert the content to PDF
-    doc.fromHTML(content, 15, 15, {
-        'width': 170
+    // Add the HTML content to the PDF
+    doc.html(content, {
+        callback: function(doc) {
+            doc.save('proforma_invoice.pdf');
+        },
+        x: 10,
+        y: 10,
+        width: 190 // A4 page width in mm (210mm with 10mm margins)
     });
-
-    // Save the PDF
-    doc.save('proforma_invoice.pdf');
 });
