@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,12 +8,24 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="css/">
 </head>
+
 <body>
     <div class="container mt-5">
         <h1 class="text-center mb-4">Proforma Invoice Generator</h1>
-        
+
         <!-- Form for Invoice Details -->
         <form id="invoiceForm" class="mb-4">
+            <!-- Company Selection -->
+            <div class="form-group row">
+                <label for="companySelect" class="col-sm-2 col-form-label">Select Company:</label>
+                <div class="col-sm-10">
+                    <select class="form-control" id="companySelect">
+                        <option value="companyA">Company A</option>
+                        <option value="companyB">Company B</option>
+                        <option value="companyC">Company C</option>
+                    </select>
+                </div>
+            </div>
             <!-- Client Information -->
             <div class="form-group row">
                 <label for="clientName" class="col-sm-2 col-form-label">Client Name:</label>
@@ -26,10 +39,18 @@
                     <textarea class="form-control" id="clientAddress" name="clientAddress" rows="3" required></textarea>
                 </div>
             </div>
+            <!-- GSTIN/UIN for Client -->
+            <div class="form-group row">
+                <label for="clientGSTIN" class="col-sm-2 col-form-label">Client GSTIN/UIN:</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" id="clientGSTIN" placeholder="Enter Client GSTIN/UIN">
+                </div>
+            </div>
+            <!-- Invoice Date with default to today -->
             <div class="form-group row">
                 <label for="invoiceDate" class="col-sm-2 col-form-label">Invoice Date:</label>
-                <div class="col-sm-4">
-                    <input type="date" class="form-control" id="invoiceDate" name="invoiceDate" required>
+                <div class="col-sm-10">
+                    <input type="date" class="form-control" id="invoiceDate">
                 </div>
             </div>
 
@@ -54,8 +75,11 @@
 
             <!-- Preview and Generate Invoice Buttons -->
             <div class="mt-4">
-                <button type="button" class="btn btn-primary" id="generatePreview">Preview Invoice</button>
-                <button type="button" class="btn btn-success" id="downloadPdf" style="display: none;">Download PDF</button>
+                <button type="button" id="generatePreview" class="btn btn-primary">
+                    Generate Preview
+                </button>
+                <button type="button" class="btn btn-success" id="downloadPdf" style="display: none;">Download
+                    PDF</button>
             </div>
         </form>
 
@@ -72,5 +96,37 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script src="js/app.js"></script>
+    <script>
+        // Set the current date as the default value for the invoice date
+        document.addEventListener('DOMContentLoaded', (event) => {
+            const today = new Date();
+            const formattedDate = today.toISOString().split('T')[0]; // Format to yyyy-mm-dd
+            document.getElementById('invoiceDate').value = formattedDate;
+        });
+    </script>
 </body>
+
+
+<!-- Modal for PDF Preview -->
+<div class="modal fade" id="pdfPreviewModal" tabindex="-1" role="dialog" aria-labelledby="pdfPreviewModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="pdfPreviewModalLabel">Proforma Invoice Preview</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!-- A4 size preview content will be injected here -->
+                <div id="a4-preview"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" id="downloadPdf" class="btn btn-primary">Download PDF</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 </html>
