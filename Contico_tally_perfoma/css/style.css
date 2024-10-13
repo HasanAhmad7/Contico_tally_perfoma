@@ -24,53 +24,60 @@
 } */
 
 .invoiceInfo {
-    display: flex;
-    justify-content: space-between;
+  display: flex;
+  justify-content: space-between;
+}
+
+.infoDiv1 {
+  max-width: 50%;
+  text-wrap: wrap;
+}
+
+.infoDiv2 {
+  height: max-content;
+  margin-right: 2rem;
+}
+
+/* reducing the input field size */
+input,
+#companySelect {
+  padding: 7px 20px;
+  border: 1px solid gray;
+  border-radius: 0.4rem;
+}
+
+textarea {
+  width: 70%;
+  padding: 0.5rem;
+  border-radius: 0.3rem;
+}
+
+/* while printing hides the rest of the body just show the moda */
+@media print {
+  body * {
+    visibility: hidden;
+    /* Hide everything */
   }
-  .infoDiv1 {
-    max-width: 50%;
-    text-wrap: wrap;
+
+  #pdfPreviewModal,
+  #pdfPreviewModal * {
+    visibility: visible;
+    /* Show only the modal */
   }
-  .infoDiv2 {
-    height: max-content;
-    margin-right: 2rem;
+
+  #pdfPreviewModal {
+    position: absolute;
+    /* Prevent modal from being cut off */
+    left: 0;
+    top: 0;
+    width: 100%;
   }
-  /* reducing the input field size */
-  input,
-  #companySelect {
-    padding: 7px 20px;
-    border: 1px solid gray;
-    border-radius: 0.4rem;
+
+  #closeBtn,
+  #downloadPdf,
+  #closeModal,
+  #pdfPreviewModalLabel,
+  #main-h {
+    visibility: hidden;
   }
-  textarea {
-    width: 70%;
-    padding: 0.5rem;
-    border-radius: 0.3rem;
-  }
-  
-  /* while printing hides the rest of the body just show the moda */
-  @media print {
-    body * {
-      visibility: hidden; /* Hide everything */
-    }
-  
-    #pdfPreviewModal,
-    #pdfPreviewModal * {
-      visibility: visible; /* Show only the modal */
-    }
-  
-    #pdfPreviewModal {
-      position: absolute; /* Prevent modal from being cut off */
-      left: 0;
-      top: 0;
-      width: 100%;
-    }
-    #closeBtn,
-    #downloadPdf,
-    #closeModal,
-    #pdfPreviewModalLabel,
-    #main-h {
-      visibility: hidden;
-    }
-  }
-  
+}
