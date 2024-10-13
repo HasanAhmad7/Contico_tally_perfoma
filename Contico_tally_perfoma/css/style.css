@@ -1,7 +1,7 @@
 /* Style for A4 size preview inside the modal */
-#a4-preview {
-    width: 210mm;  /* A4 width */
-    height: 297mm; /* A4 height */
+/* #a4-preview {
+    width: 210mm;  
+    height: 297mm; 
     margin: 0 auto;
     background: white;
     padding: 20px;
@@ -21,4 +21,56 @@
     padding: 5px;
     border: 1px solid #000;
     text-align: left;
-}
+} */
+
+.invoiceInfo {
+    display: flex;
+    justify-content: space-between;
+  }
+  .infoDiv1 {
+    max-width: 50%;
+    text-wrap: wrap;
+  }
+  .infoDiv2 {
+    height: max-content;
+    margin-right: 2rem;
+  }
+  /* reducing the input field size */
+  input,
+  #companySelect {
+    padding: 7px 20px;
+    border: 1px solid gray;
+    border-radius: 0.4rem;
+  }
+  textarea {
+    width: 70%;
+    padding: 0.5rem;
+    border-radius: 0.3rem;
+  }
+  
+  /* while printing hides the rest of the body just show the moda */
+  @media print {
+    body * {
+      visibility: hidden; /* Hide everything */
+    }
+  
+    #pdfPreviewModal,
+    #pdfPreviewModal * {
+      visibility: visible; /* Show only the modal */
+    }
+  
+    #pdfPreviewModal {
+      position: absolute; /* Prevent modal from being cut off */
+      left: 0;
+      top: 0;
+      width: 100%;
+    }
+    #closeBtn,
+    #downloadPdf,
+    #closeModal,
+    #pdfPreviewModalLabel,
+    #main-h {
+      visibility: hidden;
+    }
+  }
+  
